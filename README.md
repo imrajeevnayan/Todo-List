@@ -1,7 +1,7 @@
-```markdown
 # Todo List Application
 
-A simple Todo List application built with `Spring Boot` (backend) and `React` with `Tailwind CSS` (frontend). The backend provides a RESTful API for managing todos, using `Spring Data JPA` with a `PostgreSQL` database. The frontend offers a user-friendly interface to create, update, complete, and delete todos.
+- A simple Todo List application built with `Spring Boot` (backend) and `React` with `Tailwind CSS` (frontend). The backend provides a RESTful API for managing todos, using `Spring Data JPA` with a `PostgreSQL` database. 
+- The frontend offers a user-friendly interface to create, update, complete, and delete todos.
 
 ## Features
 - Create, read, update, and delete (CRUD) todos.
