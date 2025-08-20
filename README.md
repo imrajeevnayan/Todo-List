@@ -137,6 +137,11 @@ curl -X DELETE "http://localhost:8080/todos/1"
 - **Edit Todo**: Click `Edit`, modify the title, and click `Save`.
 - **Complete Todo**: Click `Complete` to mark a todo as done.
 - **Delete Todo**: Click `Delete` to remove a todo.
+## Screenshot
+
+Below is a screenshot of the `React` frontend interface:
+
+![Todo List Frontend](img.png)
 
 ## Dependencies
 - **Backend**:
