@@ -5,7 +5,7 @@ A simple Todo List application built with `Spring Boot` (backend) and `React` wi
 
 ## Frontend Screenshot
 
-![Todo List Frontend](https://via.placeholder.com/800x400?text=Todo+List+Frontend+Screenshot)
+![Todo List Frontend](img.png)
 *Replace the above placeholder with the actual screenshot URL after uploading it to a public repository (e.g., `https://raw.githubusercontent.com/<username>/todo-list/main/assets/frontend-screenshot.png`) or image hosting service. To capture the screenshot, run `mvn spring-boot:run` and open `http://localhost:8080`, or use the deployed Render URL.*
 
 ## Features
