@@ -1,11 +1,12 @@
+# Todo-List
 
-# Todo List Application
+![JAVA](https://img.shields.io/badge/JAVA-blue?style=for-the-badge) ![GitHub stars](https://img.shields.io/github/stars/imrajeevnayan/Todo-List?style=for-the-badge) ![GitHub forks](https://img.shields.io/github/forks/imrajeevnayan/Todo-List?style=for-the-badge)
+                
+🌐 **Live Demo**: [https://todo-list-fo0g.onrender.com/](https://todo-list-fo0g.onrender.com/)
 
 A simple Todo List application built with `Spring Boot` (backend) and `React` with `Tailwind CSS` (frontend). The backend provides a RESTful API for managing todos, using `Spring Data JPA` with a `PostgreSQL` database. The frontend offers a user-friendly interface to create, update, complete, and delete todos.
-
-## Live Demo
-
 The application is deployed and accessible at: [https://todo-list-fo0g.onrender.com/](https://todo-list-fo0g.onrender.com/)
+
 
 ## Frontend Screenshot
 
@@ -241,4 +242,27 @@ public WebMvcConfigurer corsConfigurer() {
 Feel free to fork the repository, create feature branches, and submit pull requests.
 
 ## License
-This project is licensed under the `MIT License`.
+
+This project is open source. Please check the repository for license information.
+
+## 👥 Authors
+
+- **imrajeevnayan** - *Project Creator* - [@imrajeevnayan](https://github.com/imrajeevnayan)
+
+## 🙏 Acknowledgments
+
+- Thanks to all contributors who have helped shape this project
+- Inspired by the open-source community
+- Built with ❤️ and modern development practices
+
+## 📊 Project Stats
+
+- ⭐ Stars: 0
+- 🍴 Forks: 0
+- 🐛 Issues: 0
+- 📝 Language: JAVA
+
+---
+
+⭐️ If you found this project helpful, please give it a star!
+
