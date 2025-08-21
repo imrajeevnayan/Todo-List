@@ -16,6 +16,8 @@
     function App() {
         const [todos, setTodos] = React.useState([]);
         const [inputText, setInputText] = React.useState('');
+        const [editId, setEditId] = React.useState(null);
+        const [editText, setEditText] = React.useState('');
 
         // Fetch todos on component mount
         React.useEffect(() => {
@@ -24,7 +26,20 @@
                 .catch(error => console.error('Error fetching todos:', error));
         }, []);
 
-        // Handle input change
+        // Format timestamp to local time (e.g., Aug 21, 2025, 3:50 PM)
+        const formatDate = (timestamp) => {
+            const date = new Date(timestamp);
+            return date.toLocaleString('en-US', {
+                month: 'short',
+                day: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true
+            });
+        };
+
+        // Handle input change for adding a todo
         const handleInputChange = (event) => {
             setInputText(event.target.value);
         };
@@ -39,6 +54,51 @@
                     setInputText('');
                 })
                 .catch(error => console.error('Error adding todo:', error));
+        };
+
+        // Handle edit button click
+        const handleEditClick = (todo) => {
+            setEditId(todo.id);
+            setEditText(todo.title);
+        };
+
+        // Handle edit input change
+        const handleEditChange = (event) => {
+            setEditText(event.target.value);
+        };
+
+        // Handle saving edited todo
+        const handleSaveEdit = (id) => {
+            if (editText.trim() === '') return;
+            axios.put(`https://todo-list-fo0g.onrender.com/todos/${id}/update?title=${encodeURIComponent(editText)}`)
+                .then(response => {
+                    setTodos(todos.map(todo =>
+                        todo.id === id ? { ...todo, title: response.data.title } : todo
+                    ));
+                    setEditId(null);
+                    setEditText('');
+                })
+                .catch(error => console.error('Error updating todo:', error));
+        };
+
+        // Handle completing a todo
+        const handleCompleteTodo = (id) => {
+            axios.put(`https://todo-list-fo0g.onrender.com/todos/${id}/complete`)
+                .then(response => {
+                    setTodos(todos.map(todo =>
+                        todo.id === id ? { ...todo, completed: response.data.completed } : todo
+                    ));
+                })
+                .catch(error => console.error('Error completing todo:', error));
+        };
+
+        // Handle deleting a todo
+        const handleDeleteTodo = (id) => {
+            axios.delete(`https://todo-list-fo0g.onrender.com/todos/${id}`)
+                .then(() => {
+                    setTodos(todos.filter(todo => todo.id !== id));
+                })
+                .catch(error => console.error('Error deleting todo:', error));
         };
 
         return (
@@ -61,8 +121,60 @@
                 </form>
                 <ul class="space-y-2">
                     {todos.map(todo => (
-                        <li key={todo.id} class="flex justify-between items-center p-2 border-b">
-                            <span class={todo.completed ? 'line-through' : ''}>{todo.title}</span>
+                        <li key={todo.id} class="flex flex-col p-2 border-b">
+                            {editId === todo.id ? (
+                                <div class="flex items-center space-x-2">
+                                    <input
+                                        type="text"
+                                        value={editText}
+                                        onChange={handleEditChange}
+                                        class="flex-1 p-2 border rounded"
+                                    />
+                                    <button
+                                        onClick={() => handleSaveEdit(todo.id)}
+                                        class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600"
+                                    >
+                                        Save
+                                    </button>
+                                    <button
+                                        onClick={() => setEditId(null)}
+                                        class="bg-gray-500 text-white px-2 py-1 rounded hover:bg-gray-600"
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            ) : (
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <span class={todo.completed ? 'line-through text-gray-500' : ''}>
+                                            {todo.title}
+                                        </span>
+                                        <p class="text-sm text-gray-400">
+                                            Created: {formatDate(todo.createdAt)}
+                                        </p>
+                                    </div>
+                                    <div class="flex space-x-2">
+                                        <button
+                                            onClick={() => handleEditClick(todo)}
+                                            class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600"
+                                        >
+                                            Edit
+                                        </button>
+                                        <button
+                                            onClick={() => handleCompleteTodo(todo.id)}
+                                            class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600"
+                                        >
+                                            {todo.completed ? 'Undo' : 'Complete'}
+                                        </button>
+                                        <button
+                                            onClick={() => handleDeleteTodo(todo.id)}
+                                            class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
+                                        >
+                                            Delete
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
                         </li>
                     ))}
                 </ul>
