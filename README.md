@@ -58,22 +58,24 @@ cd todo-list
 
 ### 2. Configure PostgreSQL Locally
 - Install `PostgreSQL` (e.g., version 15 or later).
-- Create a database named `todo_db`:
+- Create a database named `todo_9frh`:
 
 ```bash
-createdb todo_db
+createdb todo_9frh
 ```
 
 - Update `src/main/resources/application.properties` with your local `PostgreSQL` credentials, or rely on the default values:
 
 ```properties
-spring.datasource.url=${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/todo_db}
+spring.datasource.url=${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/todo_9frh}
 spring.datasource.username=${SPRING_DATASOURCE_USERNAME:postgres}
 spring.datasource.password=${SPRING_DATASOURCE_PASSWORD:your_password}
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
 server.port=${PORT:10000}
+spring.datasource.hikari.connection-timeout=20000
+spring.datasource.hikari.maximum-pool-size=5
 ```
 
 ### 3. Configure Lombok
@@ -102,23 +104,22 @@ mvn spring-boot:run
 - Alternatively, test the API using tools like `Postman` or `curl`.
 
 ### 6. Deploy to Render.com
-- **Create a PostgreSQL Database on Render**:
+- **Verify PostgreSQL Database on Render**:
     - Log in to `https://dashboard.render.com`.
-    - Click `New +` and select `PostgreSQL`.
-    - Use the following details (already created):
+    - Your `PostgreSQL` database is already created with the following details:
         - **Hostname**: `dpg-d2j3o8ogjchc73fq03og-a`
         - **Port**: `5432`
         - **Database**: `todo_9frh`
         - **Username**: `todo_9frh_user`
-        - **Password**: `Q1nA4gjtIzsBPFS6kfX5Z4omZbDW49eU`
-        - **Internal Database URL**: `postgresql://todo_9frh_user:Q1nA4gjtIzsBPFS6kfX5Z4omZbDW49eU@dpg-d2j3o8ogjchc73fq03og-a/todo_9frh`
+        - **Password**: `[REDACTED]` (sensitive, set via environment variables)
+        - **Internal Database URL**: `postgresql://todo_9frh_user:[REDACTED]@dpg-d2j3o8ogjchc73fq03og-a/todo_9frh`
     - Ensure the database is in the `Oregon (US West)` region and shows as `Available`.
 - **Push to GitHub**:
     - Ensure your project is in a `GitHub` repository:
 
 ```bash
 git add .
-git commit -m "Configure for Render deployment with PostgreSQL"
+git commit -m "Update README and application.properties for Render deployment"
 git push origin main
 ```
 
@@ -130,10 +131,10 @@ git push origin main
         - **Region**: `Oregon (US West)` (to match the database).
         - **Branch**: `main`.
         - **Environment Variables** (under `Advanced`):
-            - `SPRING_DATASOURCE_URL`: `postgresql://todo_9frh_user:Q1nA4gjtIzsBPFS6kfX5Z4omZbDW49eU@dpg-d2j3o8ogjchc73fq03og-a/todo_9frh`
+            - `SPRING_DATASOURCE_URL`: `postgresql://todo_9frh_user:[REDACTED]@dpg-d2j3o8ogjchc73fq03og-a/todo_9frh` (replace `[REDACTED]` with the actual password provided in your Render dashboard).
             - `SPRING_DATASOURCE_USERNAME`: `todo_9frh_user`
-            - `SPRING_DATASOURCE_PASSWORD`: `Q1nA4gjtIzsBPFS6kfX5Z4omZbDW49eU`
-            - `PORT`: `10000` (optional, as it’s set in `application.properties`).
+            - `SPRING_DATASOURCE_PASSWORD`: `[REDACTED]` (replace with the actual password).
+            - `PORT`: `10000` (optional, as set in `application.properties`).
     - Click `Create Web Service`. Render will build the `Docker` image and deploy it.
 - Access the deployed app via the provided `Render.com` URL (e.g., `https://todo-list-app.onrender.com`).
 
@@ -217,21 +218,20 @@ public WebMvcConfigurer corsConfigurer() {
 }
 ```
 
-- **Security**: Avoid committing sensitive data to public repositories. The `application.properties` uses environment variables for `Render.com` deployment.
+- **Security**: Avoid committing sensitive data to public repositories. The `application.properties` uses environment variables for `Render.com` deployment to securely handle database credentials. Do not hardcode the `PostgreSQL` password in `application.properties`.
 - **Docker**: The `Dockerfile` builds the `Spring Boot` application and serves the `React` frontend. Ensure it’s in the root directory.
 - **Render Deployment**: Use `Render.com`’s free tier for testing, but note that free instances spin down on inactivity and the free `PostgreSQL` instance expires after 90 days.
 - **Extending**: Add features like user authentication or filtering todos by modifying the backend and frontend.
 
 ## Troubleshooting
-- **Database Errors**: Verify the `SPRING_DATASOURCE_*` environment variables in `Render.com` match the provided `PostgreSQL` details.
+- **Database Errors**: Verify the `SPRING_DATASOURCE_*` environment variables in `Render.com` match the provided `PostgreSQL` details. Check Render logs for errors like `PSQLException: Connection refused`.
 - **Lombok Errors**: Ensure `Lombok` is set up in your IDE.
 - **Frontend Errors**: Check the browser console for network or JavaScript errors.
 - **CORS Issues**: Apply the CORS configuration above if requests are blocked.
-- **Render Deployment Errors**: Check `Render.com` logs for build or runtime issues. Ensure the `Dockerfile` is correct and the `PostgreSQL` URL is valid.
+- **Render Deployment Errors**: Check `Render.com` logs for build or runtime issues. Ensure the `Dockerfile` is correct and the `PostgreSQL` credentials are valid.
 
 ## Contributing
 Feel free to fork the repository, create feature branches, and submit pull requests.
 
 ## License
 This project is licensed under the `MIT License`.
-```
